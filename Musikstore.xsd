@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Musikstore" type="MusikstoreType"/>
+	<xs:complexType name="MusikstoreType">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="kunde" type="kundeType"/>
+			<xs:element name="kuenstler" type="kuenstlerType"/>
+			<xs:element name="titel" type="titelType"/>
+			<xs:element name="einkauf" type="einkaufType"/>
+			<xs:element name="playlist" type="playlistType"/>
+			<xs:element name="titel_in_playlist" type="titel_in_playlistType"/>
+			<xs:element name="album" type="albumType"/>
+			<xs:element name="album_hat_titel" type="album_hat_titelType"/>
+			<xs:element name="bewertung" type="bewertungType"/>
+			<xs:element name="titel_hat_genre" type="titel_hat_genreType"/>
+			<xs:element name="genre" type="genreType"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="kundeType">
+		<xs:sequence>
+			<xs:element name="vorname" type="xs:string"/>
+			<xs:element name="nachname" type="xs:string"/>
+			<xs:element name="straße" type="xs:string"/>
+			<xs:element name="hausNr" type="xs:integer"/>
+			<xs:element name="ort" type="xs:string"/>
+			<xs:element name="plz" type="xs:integer"/>
+			<xs:element name="email" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="kundenNr" type="xs:ID" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="bewertungType">
+		<xs:sequence>
+			<xs:element name="bewertung" type="xs:string"/>
+			<xs:element name="datum" type="xs:date"/>
+			<xs:choice>
+				<xs:element name="titelID" type="xs:IDREF"/>
+				<xs:element name="albumID" type="xs:IDREF"/>
+				<xs:element name="kuenstlerID" type="xs:IDREF"/>
+			</xs:choice>
+			<xs:element name="kundenNr" type="xs:IDREF"/>
+		</xs:sequence>
+		<xs:attribute name="bewertungID" type="xs:ID"/>
+	</xs:complexType>
+	<xs:complexType name="kuenstlerType">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="biographie" type="xs:string"/>
+			<xs:element name="herkunft" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="kuenstlerID" type="xs:ID"/>
+	</xs:complexType>
+	<xs:complexType name="albumType">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="datum" type="xs:date"/>
+			<xs:element name="cover" type="xs:anyType"/>
+			<xs:element name="pfad" type="xs:string"/>
+			<xs:element name="preis" type="xs:double"/>
+			<xs:element name="kuenstlerID" type="xs:IDREF"/>
+		</xs:sequence>
+		<xs:attribute name="albumID" type="xs:ID"/>
+	</xs:complexType>
+	<xs:complexType name="album_hat_titelType">
+		<xs:sequence>
+			<xs:element name="titelID" type="xs:IDREF" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="albumID" type="xs:IDREF"/>
+	</xs:complexType>
+	<xs:complexType name="titelType">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="preis" type="xs:double"/>
+			<xs:element name="pfad" type="xs:string"/>
+			<xs:element name="laenge" type="xs:string"/>
+			<xs:element name="kuenstlerID" type="xs:IDREF"/>
+		</xs:sequence>
+		<xs:attribute name="titelID" type="xs:ID"/>
+	</xs:complexType>
+	<xs:complexType name="titel_hat_genreType">
+		<xs:attribute name="titelID" type="xs:IDREF"/>
+		<xs:attribute name="genre" type="xs:IDREF"/>
+	</xs:complexType>
+	<xs:complexType name="genreType">
+		<xs:attribute name="genre" type="xs:ID"/>
+	</xs:complexType>
+	<xs:complexType name="titel_in_playlistType">
+		<xs:sequence>
+			<xs:element name="titelID" type="xs:IDREF" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="playlistNr" type="xs:IDREF"/>
+	</xs:complexType>
+	<xs:complexType name="playlistType">
+		<xs:sequence>
+			<xs:element name="kommentar" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="kundenNr" type="xs:IDREF"/>
+		</xs:sequence>
+		<xs:attribute name="playlistNr" type="xs:ID"/>
+	</xs:complexType>
+	<xs:complexType name="einkaufType">
+		<xs:sequence>
+			<xs:element name="titelId" type="xs:IDREF" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="albumId" type="xs:IDREF" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="zahlung">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+				  <xs:enumeration value="Paypal"/>
+				  <xs:enumeration value="Lastschrift"/>
+				  <xs:enumeration value="Sofortüberweisung"/>
+				</xs:restriction>
+			</xs:simpleType>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="kundenNr" type="xs:IDREF"/>
+				<xs:element name="kunde" type="kundeType"/>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="bestellNr" type="xs:integer"/>
+	</xs:complexType>
+</xs:schema>
